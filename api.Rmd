@@ -1,0 +1,81 @@
+---
+title: "API"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message = F, warning = F)
+library(knitr)
+library(reticulate)
+```
+
+We're using [plumber](https://www.rplumber.io/) to build the application programming interface to the database here:
+
+https://api.calstartdata.org
+
+## Browser
+
+To try it yourself, please visit the [API](https://api.calstartdata.org), expand any of the interfaces and click on "Try it out". 
+
+## Command line
+
+This will show the command using [curl](https://curl.haxx.se) to fetch the data:
+
+```{bash}
+curl -s "https://api.calstartdata.org/projects"
+```
+
+```{bash}
+curl -s "https://api.calstartdata.org/project/1"
+```
+
+The data is formatted as [JSON](https://www.w3schools.com/whatis/whatis_json.asp), which allows for flexible hierarchical data structures that are both human and machine readable. These JSON structures can be rendered into native programming language data structures, such as data frames, that can be further manipulated.
+
+## R
+
+Here's an example of how you might programmatically access the data in R using the [jsonlite](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-apis.html) library:
+
+```{r}
+projects <- jsonlite::fromJSON("https://api.calstartdata.org/projects")
+knitr::kable(projects)
+
+knitr::kable(jsonlite::fromJSON("https://api.calstartdata.org/project/1"))
+```
+
+## Python
+
+And from Python:
+
+```{r python install, eval=F, echo = F}
+# one time install
+install.packages("reticulate")
+# yes, install Miniconda
+library(reticulate)
+py_install("pandas")
+```
+
+```{python}
+import pandas
+
+projects = pandas.read_json("https://api.calstartdata.org/projects")
+
+project_1 = pandas.read_json("https://api.calstartdata.org/project/1")
+```
+
+Since this web page is rendered in Rmarkdown, we'll show the contents of the Python data frames using the same R function as for the R example above, getting the Python objects using the R library [reticulate](https://rstudio.github.io/reticulate/articles/r_markdown.html#calling-python-from-r-1):
+
+```{r}
+library(reticulate)
+
+knitr::kable(py$projects)
+knitr::kable(py$project_1)
+```
+
+
+
+

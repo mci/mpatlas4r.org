@@ -1,0 +1,88 @@
+---
+title: "Reports"
+output:
+  html_document:
+    code_folding: hide
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+fmt <- knitr::opts_knit$get("rmarkdown.pandoc.to") # html latex docx
+if (fmt != "html"){
+  knitr::opts_chunk$set(echo = F, warning = F, message = F)
+} else {
+  knitr::opts_chunk$set(echo = T, warning = F, message = F)
+}
+```
+
+Reports can extract data from the API for automated generation of text, figures (maps, time series, etc) and tables in a variety of formats (html, pdf, docx). This is especially made possible with Rmarkdown (see 1 min video: [What is R Markdown? on Vimeo](https://vimeo.com/178485416)).
+
+This web page reports.**html** was rendered from [reports.**Rmd**]( https://github.com/CALSTART/calstartdata.org/blob/master/reports.Rmd) which can also be rendered in these other formats:
+
+- Adobe: [reports.**pdf**](./reports.pdf)
+- Word: [reports.**docx**](./reports.docx)
+
+## Projects
+
+```{r}
+library(jsonlite)
+library(knitr)
+library(kableExtra)
+library(glue)
+library(stringr)
+
+# helper functions ----
+str_trunc <- function(s, nchar_max = 20){
+  if (nchar(s) > nchar_max){
+    s <- str_sub(projects$name[1], end=nchar_max) %>% 
+      paste0("...")
+  }
+  return(s)
+}
+
+kbl <- function(tbl){
+  if (fmt != "html"){
+    out <- kable(tbl) 
+  } else {
+    out <- kable(tbl) %>%
+      kable_styling(bootstrap_options = c("striped", "hover"))
+  }
+  out
+}
+
+# projects ----
+projects <- fromJSON("https://api.calstartdata.org/projects")
+kbl(projects)
+```
+
+### 1. `r str_trunc(projects$name[1])`
+
+Full Project Name: `r projects$name[1]`
+
+#### Vehicles
+
+```{r}
+fromJSON("https://api.calstartdata.org/project/1/vehicles") %>% 
+  kbl()
+```
+
+
+### 2. `r str_trunc(projects$name[2])`
+
+#### Vehicles
+
+```{r}
+fromJSON("https://api.calstartdata.org/project/2/vehicles") %>% 
+  kbl()
+```
+

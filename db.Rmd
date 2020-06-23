@@ -1,0 +1,115 @@
+---
+title: "Database"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message = F, warning = F)
+```
+
+## load data
+
+We're using this initial spreadsheet:
+
+- [data_framework_sbcta+sacaqmd](https://docs.google.com/spreadsheets/d/1a1JgnDPTsww3rrrhXt_-ipWJOqKqw_gv60Wx1fQeksI/edit?usp=sharing) - Google Sheet
+
+### connect to database
+
+```{r}
+# libraries -----
+library(here)
+library(glue)
+library(DBI)
+library(RPostgres)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(lubridate)
+library(stringr)
+library(DT)
+library(purrr)
+
+# variables ----
+passwd_txt <- "/home/admin/password_calstartdata.org"
+
+# process ----
+passwd <- readLines(passwd_txt)
+
+# connect to database ----
+con <- dbConnect(
+  Postgres(),
+  dbname   = "gis",
+  host     = "postgis",
+  port     = 5432,
+  user     = "admin",
+  password = passwd)
+
+# list tables of spatially enabled database
+dbListTables(con)
+```
+
+### fetch spreadsheet data
+
+```{r}
+gsheet <- "https://docs.google.com/spreadsheets/d/1a1JgnDPTsww3rrrhXt_-ipWJOqKqw_gv60Wx1fQeksI/gviz/tq?tqx=out:csv"
+tbl_cols <- read_csv(glue("{gsheet}&sheet=COLUMNS")) %>% 
+  select(1:6)
+
+# COLUMNS sheet describing columns
+datatable(tbl_cols)
+```
+
+### `load_tbl()`: create & append
+
+```{r}
+load_tbl <- function(tbl, redo = F){
+  # tbl = "vehicles"
+  
+  message(glue("load_tbl(tbl = '{tbl}')"))
+  
+  tbls_skip = list(
+    project_takeaways = 'multiple primary keys for table "project_takeaways" are not allowed')
+  
+  if (tbl %in% names(tbls_skip))
+    return(glue("table {tbl} is being skipped"))
+  
+  if (tbl %in% dbListTables(con) & !redo)
+    return(glue("table {tbl} exists"))
+  
+  cols <- tbl_cols %>% 
+    filter(table == tbl) %>% 
+    replace_na(list(
+      is_key    = FALSE,
+      data_type = "text")) %>% 
+    mutate(
+      sql_col = glue("{column} {data_type}{ifelse(is_key, ' PRIMARY KEY', '')}"))
+  
+  cols_sql <- cols %>% 
+    pull(sql_col) %>% 
+    paste(collapse = ",\n\t")
+  
+  sql = glue("CREATE TABLE {tbl}(\n\t{cols_sql} );") # cat(sql)
+  dbSendQuery(con, sql)
+  
+  d <- read_csv(glue("{gsheet}&sheet={tbl}")) %>% 
+    select(one_of(cols$column))
+  
+  dbWriteTable(con, tbl, d, append = T)
+  # d <- tbl(con, tbl) %>% collect()
+  # d
+}
+```
+
+
+### loop over tables
+
+```{r}
+tbls <- tbl_cols$table %>% unique() %>% sort()
+walk(tbls, load_tbl)
+```
+

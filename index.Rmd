@@ -1,0 +1,17 @@
+---
+title: "CALSTARTdata"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+This website describes the feeding and uses of the application programming interface (**API**). Data gets ingested from a variety of sources into the database upon which the API sits. The API can then be used to feed data into scripts, reports and applications.
+
+```{r}
+DiagrammeR::mermaid("diagram.mmd")
+```
+
+Click on the elements in the diagram or the navigation menus for more.

@@ -1,0 +1,7 @@
+---
+title: "Apps"
+---
+
+The following application uses the API to fetch data, initially to populate the drop-down list of projects and on-the-fly to populate the table of vehicles based on the project selected by the user. See the [app.R](https://github.com/CALSTART/calstartdata.org/blob/master/app_tbl/app.R) Shiny code.
+
+<iframe style="position: absolute; width: 800px; height: 650px; border: none" src='https://shiny.calstartdata.org/tbl'></iframe>

@@ -1,0 +1,25 @@
+name: "MPAtlas4r"
+navbar:
+  type: inverse
+  title: "MPAtlas4r"
+  left:
+    - text: "Data"
+      href: data.html
+      icon: fa-files-o
+    - text: "Database"
+      href: db.html
+      icon: fa-database
+    - text: "API"
+      href: api.html
+      icon: fa-sitemap
+    - text: "Reports"
+      href: reports.html
+      icon: fa-book
+    - text: "Apps"
+      href: apps.html
+      icon: fa-bolt
+output_dir: "." 
+output:
+  html_document:
+    #theme: flatly # https://bootswatch.com/
+    css: styles.css

@@ -1,0 +1,14 @@
+graph LR
+  data[/fa:fa-files-o Data/] --> db(fa:fa-database Database) 
+  db  --> api((fa:fa-sitemap API))
+  api --> www[fa:fa-globe Website]
+  api --> scripts[fa:fa-code Scripts]
+  api --> reports[fa:fa-book Reports]
+  api --> apps[fa:fa-bolt Apps]
+click data "./data.html"
+click db "./db.html"
+click api "./api.html"
+click www "http://www.mpatlas.org"
+click scripts "./api.html#r"
+click reports "./reports.html"
+click apps "/apps.html"
