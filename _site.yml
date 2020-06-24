@@ -1,7 +1,7 @@
-name: "MPAtlas4r"
+name: "MPAtlas4R"
 navbar:
   type: inverse
-  title: "MPAtlas4r"
+  title: "MPAtlas4R"
   left:
     - text: "Data"
       href: data.html

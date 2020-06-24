@@ -1,11 +1,80 @@
 ---
 title: "Data"
+output:
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Data sources:
+Reference: [MCI MPAtlas EcoQuants - Phase II: Data Workflows, Reporting Interfaces - Scope of Work - Google Docs](https://docs.google.com/document/d/18-bfcuUg11i2DLuVfAzhcq7-0w35btR3z2uR54LJc5k/edit?usp=sharing)
 
-- quarterly reports per CARB project
+## Areas
+
+### Country (EEZ)
+
+Exclusive Economic Zone (EEZ) based on [Maritime Boundaries Geodatabase](https://marineregions.org/sources.php#mar_bound_0)
+
+[![](https://marineregions.org/images/boundaries/eez_boundaries.png)](https://marineregions.org/sources.php#mar_bound_0)
+
+Citation:
+
+- Flanders Marine Institute (2019). Maritime Boundaries Geodatabase, version 11. Available online at https://www.marineregions.org/. https://doi.org/10.14284/382.
+
+### Sea (IHO)
+
+[International Hydrographic Organisation (IHO) Sea Areas](https://marineregions.org/sources.php#mar_bound_1)
+
+[![](https://marineregions.org/images/boundaries/IHO_crop_small.png)](https://marineregions.org/sources.php#mar_bound_1)
+
+Citation:
+
+- Flanders Marine Institute (2018). IHO Sea Areas, version 3. Available online at https://www.marineregions.org/. https://doi.org/10.14284/323.
+
+### Eco-region (MEOW+PPOW)
+
+Marine Ecoregions of the World (MEOW) & Pelagic Provinces of the World (PPOW)
+
+### Eco-place (EBSA)
+
+## Values
+
+### Biodiversity (BBNJ)
+
+- Global Marine Biodiversity Index (GMBI) from AquaMaps for United Nations (UN) Biodiversity Beyond National Jurisdiction (BBNJ) 
+  - funded by Pew with Benioff
+  - 0.5 degree global cells
+
+Also MCI High Seas Mapper
+
+### Impacts (CIA)
+
+[Cumulative Impact Assessment](https://www.nceas.ucsb.edu/globalmarine) (CIA), ie Global Map of Human Impacts to Marine Ecosystems (Halpern et al 2008): 
+
+- [Model](https://www.nceas.ucsb.edu/globalmarine2008/model)
+- [Impacts](https://www.nceas.ucsb.edu/globalmarine2008/impacts)
+- [Ecosystems](https://www.nceas.ucsb.edu/globalmarine2008/ecosystems)
+- 1km global in Mollweide projection
+
+### Fish (SAUP)
+
+[Sea Around Us Project](http://www.seaaroundus.org/) (SAUP)
+
+- [api.openfisheries.org](https://github.com/OpenFisheries/api.openfisheries.org)
+- [ropensci/seaaroundus](https://github.com/ropensci/seaaroundus)
+
+### Fishing (GFW)
+
+- [Global Fishing Watch](https://globalfishingwatch.org) (GFW)
+  - [Downloadable fisheries data](https://globalfishingwatch.org/datasets-and-code/)
+
+### Mining
+
+- In relation to MPA Guide
+- See BBNJ / BOI effort; exclusion zones vs prospective places; International Seabed Authority. 
+- Oil & Gas
+
+

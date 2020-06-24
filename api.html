@@ -11,7 +11,7 @@
 
 
 
-<title>MPAtlas4R</title>
+<title>API</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,19 +19,14 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
-<script src="site_libs/d3-3.3.8/d3.min.js"></script>
-<script src="site_libs/dagre-0.4.0/dagre-d3.min.js"></script>
-<link href="site_libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
-<script src="site_libs/mermaid-0.3.0/dist/mermaid.js"></script>
-<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="site_libs/chromatography-0.1/chromatography.js"></script>
-<script src="site_libs/DiagrammeR-binding-1.0.5/DiagrammeR.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -259,6 +254,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -266,6 +324,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -329,18 +397,124 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">MPAtlas4R</h1>
+<h1 class="title toc-ignore">API</h1>
 
 </div>
 
 
-<p>This website describes the data input and possible outputs of the application programming interface (<strong>API</strong>) for <a href="http://www.mpatlas.org">MPAtlas.org</a> related to protections and enforcement of marine protected areas (MPAs) globally. Data gets ingested from a variety of sources into the database upon which the API sits. The API can then be used to feed data into scripts, reports and applications.</p>
-<div id="htmlwidget-85adc0837130852b86cc" style="width:672px;height:480px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-85adc0837130852b86cc">{"x":{"diagram":"graph LR\n  data[/fa:fa-files-o Data/] --> db(fa:fa-database Database) \n  db  --> api((fa:fa-sitemap API))\n  api --> www[fa:fa-globe Website]\n  api --> scripts[fa:fa-code Scripts]\n  api --> reports[fa:fa-book Reports]\n  api --> apps[fa:fa-bolt Apps]\nclick data \"./data.html\"\nclick db \"./db.html\"\nclick api \"./api.html\"\nclick www \"http://www.mpatlas.org\"\nclick scripts \"./api.html#r\"\nclick reports \"./reports.html\"\nclick apps \"/apps.html\""},"evals":[],"jsHooks":[]}</script>
-<p>Click on the elements in the diagram or the navigation menus for more.</p>
+<p>We’re using <a href="https://www.rplumber.io/">plumber</a> to build the application programming interface to the database here:</p>
+<p><a href="https://api.calstartdata.org" class="uri">https://api.calstartdata.org</a></p>
+<div id="browser" class="section level2">
+<h2>Browser</h2>
+<p>To try it yourself, please visit the <a href="https://api.calstartdata.org">API</a>, expand any of the interfaces and click on “Try it out”.</p>
+</div>
+<div id="command-line" class="section level2">
+<h2>Command line</h2>
+<p>This will show the command using <a href="https://curl.haxx.se">curl</a> to fetch the data:</p>
+<pre class="bash"><code>curl -s &quot;https://api.calstartdata.org/projects&quot;</code></pre>
+<pre><code>## [{&quot;project_id&quot;:1,&quot;name&quot;:&quot;San Bernardino County Transportation Authority Multi-Class Heavy-Duty Zero Emission Truck Development Project for Intermodal and Warehouse Facilities&quot;},{&quot;project_id&quot;:2,&quot;name&quot;:&quot;California Collaborative Advanced Technology Drayage Truck Demonstration Project&quot;}]</code></pre>
+<pre class="bash"><code>curl -s &quot;https://api.calstartdata.org/project/1&quot;</code></pre>
+<pre><code>## [{&quot;project_id&quot;:1,&quot;name&quot;:&quot;San Bernardino County Transportation Authority Multi-Class Heavy-Duty Zero Emission Truck Development Project for Intermodal and Warehouse Facilities&quot;,&quot;grantee&quot;:&quot;CARB&quot;,&quot;date_start&quot;:&quot;2014-06-01&quot;}]</code></pre>
+<p>The data is formatted as <a href="https://www.w3schools.com/whatis/whatis_json.asp">JSON</a>, which allows for flexible hierarchical data structures that are both human and machine readable. These JSON structures can be rendered into native programming language data structures, such as data frames, that can be further manipulated.</p>
+</div>
+<div id="r" class="section level2">
+<h2>R</h2>
+<p>Here’s an example of how you might programmatically access the data in R using the <a href="https://cran.r-project.org/web/packages/jsonlite/vignettes/json-apis.html">jsonlite</a> library:</p>
+<pre class="r"><code>projects &lt;- jsonlite::fromJSON(&quot;https://api.calstartdata.org/projects&quot;)
+knitr::kable(projects)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">project_id</th>
+<th align="left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">San Bernardino County Transportation Authority Multi-Class Heavy-Duty Zero Emission Truck Development Project for Intermodal and Warehouse Facilities</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">California Collaborative Advanced Technology Drayage Truck Demonstration Project</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(jsonlite::fromJSON(&quot;https://api.calstartdata.org/project/1&quot;))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">project_id</th>
+<th align="left">name</th>
+<th align="left">grantee</th>
+<th align="left">date_start</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">San Bernardino County Transportation Authority Multi-Class Heavy-Duty Zero Emission Truck Development Project for Intermodal and Warehouse Facilities</td>
+<td align="left">CARB</td>
+<td align="left">2014-06-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="python" class="section level2">
+<h2>Python</h2>
+<p>And from Python:</p>
+<pre class="python"><code>import pandas
+
+projects = pandas.read_json(&quot;https://api.calstartdata.org/projects&quot;)
+
+project_1 = pandas.read_json(&quot;https://api.calstartdata.org/project/1&quot;)</code></pre>
+<p>Since this web page is rendered in Rmarkdown, we’ll show the contents of the Python data frames using the same R function as for the R example above, getting the Python objects using the R library <a href="https://rstudio.github.io/reticulate/articles/r_markdown.html#calling-python-from-r-1">reticulate</a>:</p>
+<pre class="r"><code>library(reticulate)
+
+knitr::kable(py$projects)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">project_id</th>
+<th align="left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">San Bernardino County Transportation Authority Multi-Class Heavy-Duty Zero Emission Truck Development Project for Intermodal and Warehouse Facilities</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">California Collaborative Advanced Technology Drayage Truck Demonstration Project</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(py$project_1)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">project_id</th>
+<th align="left">name</th>
+<th align="left">grantee</th>
+<th align="left">date_start</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">San Bernardino County Transportation Authority Multi-Class Heavy-Duty Zero Emission Truck Development Project for Intermodal and Warehouse Facilities</td>
+<td align="left">CARB</td>
+<td align="left">2014-06-01</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -373,6 +547,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

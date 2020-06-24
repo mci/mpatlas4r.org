@@ -1,5 +1,5 @@
 ---
-title: "CALSTARTdata"
+title: "MPAtlas4R"
 output: html_document
 ---
 
@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = F)
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
-This website describes the feeding and uses of the application programming interface (**API**). Data gets ingested from a variety of sources into the database upon which the API sits. The API can then be used to feed data into scripts, reports and applications.
+This website describes the data input and possible outputs of the application programming interface (**API**) for [MPAtlas.org](http://www.mpatlas.org) related to protections and enforcement of marine protected areas (MPAs) globally. Data gets ingested from a variety of sources into the database upon which the API sits. The API can then be used to feed data into scripts, reports and applications.
 
 ```{r}
 DiagrammeR::mermaid("diagram.mmd")

@@ -11,7 +11,7 @@
 
 
 
-<title>MPAtlas4R</title>
+<title>Data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,19 +19,14 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
-<script src="site_libs/d3-3.3.8/d3.min.js"></script>
-<script src="site_libs/dagre-0.4.0/dagre-d3.min.js"></script>
-<link href="site_libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
-<script src="site_libs/mermaid-0.3.0/dist/mermaid.js"></script>
-<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="site_libs/chromatography-0.1/chromatography.js"></script>
-<script src="site_libs/DiagrammeR-binding-1.0.5/DiagrammeR.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -259,6 +254,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -266,6 +324,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -329,18 +397,94 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">MPAtlas4R</h1>
+<h1 class="title toc-ignore">Data</h1>
 
 </div>
 
 
-<p>This website describes the data input and possible outputs of the application programming interface (<strong>API</strong>) for <a href="http://www.mpatlas.org">MPAtlas.org</a> related to protections and enforcement of marine protected areas (MPAs) globally. Data gets ingested from a variety of sources into the database upon which the API sits. The API can then be used to feed data into scripts, reports and applications.</p>
-<div id="htmlwidget-85adc0837130852b86cc" style="width:672px;height:480px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-85adc0837130852b86cc">{"x":{"diagram":"graph LR\n  data[/fa:fa-files-o Data/] --> db(fa:fa-database Database) \n  db  --> api((fa:fa-sitemap API))\n  api --> www[fa:fa-globe Website]\n  api --> scripts[fa:fa-code Scripts]\n  api --> reports[fa:fa-book Reports]\n  api --> apps[fa:fa-bolt Apps]\nclick data \"./data.html\"\nclick db \"./db.html\"\nclick api \"./api.html\"\nclick www \"http://www.mpatlas.org\"\nclick scripts \"./api.html#r\"\nclick reports \"./reports.html\"\nclick apps \"/apps.html\""},"evals":[],"jsHooks":[]}</script>
-<p>Click on the elements in the diagram or the navigation menus for more.</p>
+<p>Reference: <a href="https://docs.google.com/document/d/18-bfcuUg11i2DLuVfAzhcq7-0w35btR3z2uR54LJc5k/edit?usp=sharing">MCI MPAtlas EcoQuants - Phase II: Data Workflows, Reporting Interfaces - Scope of Work - Google Docs</a></p>
+<div id="areas" class="section level2">
+<h2>Areas</h2>
+<div id="country-eez" class="section level3">
+<h3>Country (EEZ)</h3>
+<p>Exclusive Economic Zone (EEZ) based on <a href="https://marineregions.org/sources.php#mar_bound_0">Maritime Boundaries Geodatabase</a></p>
+<p><a href="https://marineregions.org/sources.php#mar_bound_0"><img src="https://marineregions.org/images/boundaries/eez_boundaries.png" /></a></p>
+<p>Citation:</p>
+<ul>
+<li>Flanders Marine Institute (2019). Maritime Boundaries Geodatabase, version 11. Available online at <a href="https://www.marineregions.org/" class="uri">https://www.marineregions.org/</a>. <a href="https://doi.org/10.14284/382" class="uri">https://doi.org/10.14284/382</a>.</li>
+</ul>
+</div>
+<div id="sea-iho" class="section level3">
+<h3>Sea (IHO)</h3>
+<p><a href="https://marineregions.org/sources.php#mar_bound_1">International Hydrographic Organisation (IHO) Sea Areas</a></p>
+<p><a href="https://marineregions.org/sources.php#mar_bound_1"><img src="https://marineregions.org/images/boundaries/IHO_crop_small.png" /></a></p>
+<p>Citation:</p>
+<ul>
+<li>Flanders Marine Institute (2018). IHO Sea Areas, version 3. Available online at <a href="https://www.marineregions.org/" class="uri">https://www.marineregions.org/</a>. <a href="https://doi.org/10.14284/323" class="uri">https://doi.org/10.14284/323</a>.</li>
+</ul>
+</div>
+<div id="eco-region-meowppow" class="section level3">
+<h3>Eco-region (MEOW+PPOW)</h3>
+<p>Marine Ecoregions of the World (MEOW) &amp; Pelagic Provinces of the World (PPOW)</p>
+</div>
+<div id="eco-place-ebsa" class="section level3">
+<h3>Eco-place (EBSA)</h3>
+</div>
+</div>
+<div id="values" class="section level2">
+<h2>Values</h2>
+<div id="biodiversity-bbnj" class="section level3">
+<h3>Biodiversity (BBNJ)</h3>
+<ul>
+<li>Global Marine Biodiversity Index (GMBI) from AquaMaps for United Nations (UN) Biodiversity Beyond National Jurisdiction (BBNJ)
+<ul>
+<li>funded by Pew with Benioff</li>
+<li>0.5 degree global cells</li>
+</ul></li>
+</ul>
+<p>Also MCI High Seas Mapper</p>
+</div>
+<div id="impacts-cia" class="section level3">
+<h3>Impacts (CIA)</h3>
+<p><a href="https://www.nceas.ucsb.edu/globalmarine">Cumulative Impact Assessment</a> (CIA), ie Global Map of Human Impacts to Marine Ecosystems (Halpern et al 2008):</p>
+<ul>
+<li><a href="https://www.nceas.ucsb.edu/globalmarine2008/model">Model</a></li>
+<li><a href="https://www.nceas.ucsb.edu/globalmarine2008/impacts">Impacts</a></li>
+<li><a href="https://www.nceas.ucsb.edu/globalmarine2008/ecosystems">Ecosystems</a></li>
+<li>1km global in Mollweide projection</li>
+</ul>
+</div>
+<div id="fish-saup" class="section level3">
+<h3>Fish (SAUP)</h3>
+<p><a href="http://www.seaaroundus.org/">Sea Around Us Project</a> (SAUP)</p>
+<ul>
+<li><a href="https://github.com/OpenFisheries/api.openfisheries.org">api.openfisheries.org</a></li>
+<li><a href="https://github.com/ropensci/seaaroundus">ropensci/seaaroundus</a></li>
+</ul>
+</div>
+<div id="fishing-gfw" class="section level3">
+<h3>Fishing (GFW)</h3>
+<ul>
+<li><a href="https://globalfishingwatch.org">Global Fishing Watch</a> (GFW)
+<ul>
+<li><a href="https://globalfishingwatch.org/datasets-and-code/">Downloadable fisheries data</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="mining" class="section level3">
+<h3>Mining</h3>
+<ul>
+<li>In relation to MPA Guide</li>
+<li>See BBNJ / BOI effort; exclusion zones vs prospective places; International Seabed Authority.</li>
+<li>Oil &amp; Gas</li>
+</ul>
+</div>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -373,6 +517,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

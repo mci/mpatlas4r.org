@@ -11,7 +11,7 @@
 
 
 
-<title>MPAtlas4R</title>
+<title>Apps</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,14 +24,6 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
-<script src="site_libs/d3-3.3.8/d3.min.js"></script>
-<script src="site_libs/dagre-0.4.0/dagre-d3.min.js"></script>
-<link href="site_libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
-<script src="site_libs/mermaid-0.3.0/dist/mermaid.js"></script>
-<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="site_libs/chromatography-0.1/chromatography.js"></script>
-<script src="site_libs/DiagrammeR-binding-1.0.5/DiagrammeR.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -329,15 +321,14 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">MPAtlas4R</h1>
+<h1 class="title toc-ignore">Apps</h1>
 
 </div>
 
 
-<p>This website describes the data input and possible outputs of the application programming interface (<strong>API</strong>) for <a href="http://www.mpatlas.org">MPAtlas.org</a> related to protections and enforcement of marine protected areas (MPAs) globally. Data gets ingested from a variety of sources into the database upon which the API sits. The API can then be used to feed data into scripts, reports and applications.</p>
-<div id="htmlwidget-85adc0837130852b86cc" style="width:672px;height:480px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-85adc0837130852b86cc">{"x":{"diagram":"graph LR\n  data[/fa:fa-files-o Data/] --> db(fa:fa-database Database) \n  db  --> api((fa:fa-sitemap API))\n  api --> www[fa:fa-globe Website]\n  api --> scripts[fa:fa-code Scripts]\n  api --> reports[fa:fa-book Reports]\n  api --> apps[fa:fa-bolt Apps]\nclick data \"./data.html\"\nclick db \"./db.html\"\nclick api \"./api.html\"\nclick www \"http://www.mpatlas.org\"\nclick scripts \"./api.html#r\"\nclick reports \"./reports.html\"\nclick apps \"/apps.html\""},"evals":[],"jsHooks":[]}</script>
-<p>Click on the elements in the diagram or the navigation menus for more.</p>
+<p>The following application uses the API to fetch data, initially to populate the drop-down list of projects and on-the-fly to populate the table of vehicles based on the project selected by the user. See the <a href="https://github.com/CALSTART/calstartdata.org/blob/master/app_tbl/app.R">app.R</a> Shiny code.</p>
+<iframe style="position: absolute; width: 800px; height: 650px; border: none" src="https://shiny.calstartdata.org/tbl">
+</iframe>
 
 
 

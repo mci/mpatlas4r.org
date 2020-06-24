@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Database</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.13/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">MPAtlas4R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="data.html">
+    <span class="fa fa-files-o"></span>
+     
+    Data
+  </a>
+</li>
+<li>
+  <a href="db.html">
+    <span class="fa fa-database"></span>
+     
+    Database
+  </a>
+</li>
+<li>
+  <a href="api.html">
+    <span class="fa fa-sitemap"></span>
+     
+    API
+  </a>
+</li>
+<li>
+  <a href="reports.html">
+    <span class="fa fa-book"></span>
+     
+    Reports
+  </a>
+</li>
+<li>
+  <a href="apps.html">
+    <span class="fa fa-bolt"></span>
+     
+    Apps
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Database</h1>
+
+</div>
+
+
+<div id="load-data" class="section level2">
+<h2>Load data</h2>
+<div id="connect-to-database" class="section level3">
+<h3>Connect to database</h3>
+<pre class="r"><code># load libraries, functions, database connnection (con)
+source(&quot;functions.R&quot;)
+
+# tables
+tbls &lt;- dbListTables(con)
+tbls</code></pre>
+<pre><code>## [1] &quot;geography_columns&quot; &quot;geometry_columns&quot;  &quot;spatial_ref_sys&quot;  
+## [4] &quot;spatialdata_eez&quot;   &quot;topology&quot;          &quot;layer&quot;            
+## [7] &quot;raster_columns&quot;    &quot;raster_overviews&quot;  &quot;mpa_mpa&quot;</code></pre>
+</div>
+<div id="eez" class="section level3">
+<h3>EEZ</h3>
+<p>The <code>download.file()</code> doesn’t work in following code chunk:</p>
+<pre class="r"><code>ds &lt;- list(
+  name   = &quot;EEZ&quot;,
+  name_v = &quot;EEZ_v11_20191118&quot;,
+  org    = &quot;marineregions.org&quot;,
+  url_dl = &quot;https://marineregions.org/download_file.php?name=World_EEZ_v11_20191118_gpkg.zip&quot;,
+  f_dl   = &quot;World_EEZ_v11_20191118_gpkg.zip&quot;)
+
+dir_ds  &lt;- glue(&quot;/share/data/{ds$org}/{ds$name_v}&quot;)
+path_dl &lt;- glue(&quot;{dir_ds}/{ds$f_dl}&quot;)
+dir_create(dir_ds)
+
+download.file(ds$url_dl, path_dl)
+
+if (path_ext(path_dl) == &quot;zip&quot;)
+  unzip(path_dl, exdir = dir_ds)</code></pre>
+<p>since MarineRegions.org requires a form to be filled out:</p>
+<p><img src="images/data_marineregions.org_eez-download-form.png" /></p>
+<p>So instead, it was downloaded locally on my personal machine into the Google Drive folder <code>mci - mpatlas/</code> here:</p>
+<p><code>/Volumes/GoogleDrive/My Drive/projects/mci - mpatlas/data/marineregions.org/World_EEZ_v11_20191118_gpkg.zip</code></p>
+<p>Then uploaded:</p>
+<pre class="bash"><code>sftp -i ~/private/mpatlas.pem ubuntu@mpatlas4r.org
+
+# at prompt sftp&gt;
+lcd &#39;/Volumes/GoogleDrive/My Drive/projects/mci - mpatlas/data/marineregions.org&#39;
+mkdir data/marineregions.org
+cd data/marineregions.org
+put World_EEZ_v11_20191118_gpkg.zip
+exit</code></pre>
+<p>TODO: Mount <code>/home/ubuntu/data</code> on host to docker and sync w/ CyberDuck and Gdrive.</p>
+<p>From server to container:</p>
+<pre class="bash"><code># log into server
+ssh -i ~/private/mpatlas.pem ubuntu@mpatlas4r.org
+
+# copy into container
+docker cp ~/data/marineregions.org/World_EEZ_v11_20191118_gpkg.zip postgis:/share/data/marineregions.org/EEZ_v11_20191118/.
+
+# log into container
+docker exec -it postgis bash
+
+# unzip
+apt-get install zip
+cd /share/data/marineregions.org/EEZ_v11_20191118
+unzip World_EEZ_v11_20191118_gpkg.zip
+ls World_EEZ_v11_20191118_gpkg
+# eez_boundaries_v11.gpkg  eez_v11.gpkg  LICENSE_EEZ_v11.txt
+
+ogr2ogr --version
+# GDAL 3.1.0, released 2020/05/03
+
+pass=`cat /share/mpatlas4r.org_password.txt`
+ogrinfo -ro PG:&quot;host=localhost dbname=gis user=admin password=$passwd&quot;
+
+gpkg=&#39;/share/data/marineregions.org/EEZ_v11_20191118/World_EEZ_v11_20191118_gpkg/eez_v11.gpkg&#39;
+tbl=&#39;eez&#39;
+ogr2ogr -f &quot;PostgreSQL&quot; PG:&quot;host=localhost dbname=gis user=admin password=$passwd&quot; &quot;$gpkg&quot; -nln &quot;$tbl&quot; # -append</code></pre>
+<pre class="r"><code># tables
+tbls &lt;- dbListTables(con)
+tbls</code></pre>
+<pre><code>## [1] &quot;geography_columns&quot; &quot;geometry_columns&quot;  &quot;spatial_ref_sys&quot;  
+## [4] &quot;spatialdata_eez&quot;   &quot;topology&quot;          &quot;layer&quot;            
+## [7] &quot;raster_columns&quot;    &quot;raster_overviews&quot;  &quot;mpa_mpa&quot;</code></pre>
+</div>
+<div id="optimize" class="section level3">
+<h3>optimize</h3>
+<p>On Terminal of rstudio.mpatlas4r.org:</p>
+<pre class="bash"><code>sudo apt-get update; sudo apt-get install postgresql
+
+pass=`cat /share/mpatlas4r.org_password.txt`
+
+
+hostname:port:database:username:password
+
+echo &quot;postgis:5432:gis:admin:$pass&quot; &gt; ~/.pgpass
+chmod 0600 ~/.pgpass
+psql -h postgis -U admin -d gis
+# OR
+psql -h postgis -d gis</code></pre>
+<pre><code>\d spatialdata_eez
+ERROR:  column c.relhasoids does not exist
+
+
+c.relhasoids</code></pre>
+<pre class="r"><code>eez &lt;- st_read(con, query = &quot;SELECT * FROM spatialdata_eez LIMIT 100;&quot;)
+
+eez %&gt;% 
+  st_drop_geometry() %&gt;% 
+  datatable()</code></pre>
+<div id="htmlwidget-ab05f3c0ebf822eb6f92" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ab05f3c0ebf822eb6f92">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100"],[23,48,49,68,69,70,71,72,73,74,75,77,78,79,80,91,92,93,96,97,100,102,117,119,120,121,122,123,125,126,127,128,143,144,145,146,149,150,152,156,157,159,160,161,162,163,164,165,166,167,168,169,170,172,173,174,175,187,188,189,190,191,198,241,1,2,3,4,5,6,7,8,9,10,11,12,13,38,39,83,84,85,14,15,16,17,18,19,20,21,22,24,25,26,27,28,29,30,31,32],[8386,8314,8337,8411,8362,8364,8407,8401,8423,8424,26517,8409,8430,8435,8370,8443,33179,26518,8413,8416,8421,8420,8425,48969,48970,48971,5681,21788,8371,8471,8472,8473,8452,8426,62596,62598,8367,49000,48998,8360,8376,48956,8490,8351,5678,8469,8374,8372,5685,8354,8356,8346,8355,8392,5679,5697,21790,8491,8352,8481,8474,8475,8315,8327,8444,8379,8446,8389,8440,8439,8380,8445,8448,8382,8465,8447,48961,8313,8395,33177,8390,5680,48962,8467,8449,8432,22756,21787,8381,8450,8466,8309,8308,8334,8385,48944,48946,8388,8387,8348],["Amsterdam Island &amp; St. Paul Island Exclusive Economic Zone","Solomon Islands Exclusive Economic Zone","Seychellois Exclusive Economic Zone","British Virgin Islands Exclusive Economic Zone","Cape Verdean Exclusive Economic Zone","Spanish Exclusive Economic Zone (Canary Islands)","Cayman Islands Exclusive Economic Zone","Clipperton Exclusive Economic Zone","Panamanian Exclusive Economic Zone","Costa Rican Exclusive Economic Zone","Curaçaoan Exclusive Economic Zone","Dominican Republic Exclusive Economic Zone","Guatemalan Exclusive Economic Zone","Faeroe Exclusive Economic Zone","Gambian Exclusive Economic Zone","Palmyra Atoll Exclusive Economic Zone","Puerto Rican Exclusive Economic Zone","Saba Exclusive Economic Zone","Saint Kitts and Nevis Exclusive Economic Zone","Saint Lucia Exclusive Economic Zone","Saint Vincent and the Grenadines Exclusive Economic Zone","Trinidad and Tobago Exclusive Economic Zone","Nicaraguan Exclusive Economic Zone","Joint regime area Guyana / Barbados","Joint regime area Colombia / Dominican Republic","Overlapping claim: Venezuela / Colombia / Dominican Republic","Irish Exclusive Economic Zone","Guernsey Exclusive Economic Zone","Senegalese Exclusive Economic Zone","Guinea Bissau Exclusive Economic Zone","Guinean Exclusive Economic Zone","Ivory Coast Exclusive Economic Zone","Johnston Atoll Exclusive Economic Zone","Colombian Exclusive Economic Zone","Colombian Exclusive Economic Zone (Serrana)","Colombian Exclusive Economic Zone (Quitasueño)","Moroccan Exclusive Economic Zone","Overlapping claim Melilla: Spain / Morocco","Overlapping claim Perejil Island: Spain / Morocco","United Arab Emirates Exclusive Economic Zone","Cypriote Exclusive Economic Zone","Overlapping claim Doumeira Islands: Djibouti / Eritrea","Egyptian Exclusive Economic Zone","Eritrean Exclusive Economic Zone","Georgian Exclusive Economic Zone","Iranian Exclusive Economic Zone","Lebanese Exclusive Economic Zone","Libyan Exclusive Economic Zone","Maltese Exclusive Economic Zone","Omani Exclusive Economic Zone","Saudi Arabian Exclusive Economic Zone","Sri Lankan Exclusive Economic Zone","Sudanese Exclusive Economic Zone","Togolese Exclusive Economic Zone","Greek Exclusive Economic Zone","Turkish Exclusive Economic Zone","Monégasque Exclusive Economic Zone","Jordanian Exclusive Economic Zone","Djiboutian Exclusive Economic Zone","Bangladeshi Exclusive Economic Zone","Nigerian Exclusive Economic Zone","Cameroonian Exclusive Economic Zone","Palau Exclusive Economic Zone","South Korean Exclusive Economic Zone","American Samoa Exclusive Economic Zone","Ascension Exclusive Economic Zone","Cook Islands Exclusive Economic Zone","Overlapping claim Falkland / Malvinas Islands: UK / Argentina","French Polynesian Exclusive Economic Zone","Pitcairn Islands Exclusive Economic Zone","St. Helena Exclusive Economic Zone","Samoan Exclusive Economic Zone","Tongan Exclusive Economic Zone","Tristan Da Cunha Exclusive Economic Zone","Chilean Exclusive Economic Zone","Niue Exclusive Economic Zone","Joint regime area Argentina / Uruguay","Vanuatu Exclusive Economic Zone","Namibian Exclusive Economic Zone","Guadeloupean Exclusive Economic Zone","Sierra Leonian Exclusive Economic Zone","Icelandic Exclusive Economic Zone","Joint regime area Peru / Ecuador","Uruguayan Exclusive Economic Zone","Tokelau Exclusive Economic Zone","Peruvian Exclusive Economic Zone","Chilean Exclusive Economic Zone (San Felix and San Ambrosio islands)","Chilean Exclusive Economic Zone (Easter Island)","Brazilian Exclusive Economic Zone (Trindade)","Kiribati Exclusive Economic Zone (Phoenix Islands)","Argentinean Exclusive Economic Zone","Christmas Island Exclusive Economic Zone","Cocos Islands Exclusive Economic Zone","Comoran Exclusive Economic Zone","Crozet Islands Exclusive Economic Zone","Overlapping claim Mayotte: France / Comoros","Overlapping claim Ile Tromelin: Reunion / Madagascar / Mauritus","Heard and McDonald Islands Exclusive Economic Zone","Kerguelen Exclusive Economic Zone","Madagascan Exclusive Economic Zone"],[48979,8593,2192,8653,2168,3743,8638,8635,2249,2162,19143,8640,2097,3297,2113,8669,8641,19095,8644,8647,8651,2186,2255,8649,8640,2175,2114,4377,2225,8685,2122,2161,8678,2175,5770,5765,2221,36288,48994,2206,2159,48934,3868,2111,2102,2126,2098,2194,2217,2251,2215,2195,2183,8632,2099,2213,2222,2120,2131,2142,2253,2170,8594,8600,8670,8620,8672,8623,8656,2259,8619,8671,8674,8621,2165,8673,2216,2202,2218,8654,2191,2129,2257,2216,8675,2257,25135,15120,8622,8658,2149,8590,8589,2163,8627,8606,8613,8631,8630,7963],["200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","Joint regime","Joint regime","Overlapping claim","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","Overlapping claim","Overlapping claim","200NM","200NM","Overlapping claim","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","Overlapping claim","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","Joint regime","200NM","200NM","200NM","200NM","200NM","Joint regime","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","200NM","Overlapping claim","Overlapping claim","200NM","200NM","200NM"],[17,8593,2192,2208,2168,2185,2208,17,2249,2162,15,8640,2097,2157,2113,2204,2204,15,8644,8647,8651,2186,2255,8649,8640,2175,2114,2208,2225,8685,2122,2161,2204,2175,2175,2175,2221,2185,2185,2206,2159,2111,3868,2111,2102,2126,2098,2194,2217,2251,2215,2195,2183,8632,2099,2213,2222,2120,2131,2142,2253,2170,8594,8600,2204,2208,2227,2208,17,2208,2208,8671,8674,2208,2165,2227,2216,2202,2218,17,2191,2129,2257,2216,2227,2257,2165,2165,2143,2116,2149,2147,2147,2163,17,17,17,2147,17,7963],["Amsterdam and Saint Paul Islands","Solomon Islands","Seychelles","British Virgin Islands","Cape Verde","Canary Islands","Cayman Islands","Clipperton Island","Panama","Costa Rica","Curaçao","Dominican Republic","Guatemala","Faeroe","Gambia","Palmyra Atoll","Puerto Rico","Saba","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Trinidad and Tobago","Nicaragua","Barbados","Dominican Republic","Colombia","Ireland","Guernsey","Senegal","Guinea-Bissau","Guinea","Ivory Coast","Johnston Atoll","Colombia","Serrana Bank","Quitasueño Bank","Morocco","Melilla","Perejil Island","United Arab Emirates","Cyprus","Doumeira Islands","Egypt","Eritrea","Georgia","Iran","Lebanon","Libya","Malta","Oman","Saudi Arabia","Sri Lanka","Sudan","Togo","Greece","Turkey","Monaco","Jordan","Djibouti","Bangladesh","Nigeria","Cameroon","Palau","South Korea","American Samoa","Ascension","Cook Islands","Falkland / Malvinas Islands","French Polynesia","Pitcairn","Saint Helena","Samoa","Tonga","Tristan da Cunha","Chile","Niue","Uruguay","Vanuatu","Namibia","Guadeloupe","Sierra Leone","Iceland","Peru","Uruguay","Tokelau","Peru","Islas San Félix and San Ambrosio","Easter Island","Trindade","Phoenix Group","Argentina","Christmas Island","Cocos Islands","Comores","Crozet Islands","Mayotte","Ile Tromelin","Heard and McDonald Islands","Kerguélen","Madagascar"],["ATF","SLB","SYC","VGB","CPV",null,"CYM",null,"PAN","CRI","CUW","DOM","GTM","FRO","GMB","UMI","PRI","BES","KNA","LCA","VCT","TTO","NIC","BRB","DOM","COL","IRL","GGY","SEN","GNB","GIN","CIV","UMI","COL",null,null,"MAR",null,null,"ARE","CYP",null,"EGY","ERI","GEO","IRN","LBN","LBY","MLT","OMN","SAU","LKA","SDN","TGO","GRC","TUR","MCO","JOR","DJI","BGD","NGA","CMR","PLW","KOR","ASM","SHN","COK","FLK","PYF","PCN","SHN","WSM","TON","SHN","CHL","NIU","URY","VUT","NAM","GLP","SLE","ISL","PER","URY","TKL","PER","CHL",null,null,"KIR","ARG","CXR","CCK","COM","ATF","MYT",null,"HMD","ATF","MDG"],["France","Solomon Islands","Seychelles","United Kingdom","Cape Verde","Spain","United Kingdom","France","Panama","Costa Rica","Netherlands","Dominican Republic","Guatemala","Denmark","Gambia","United States","United States","Netherlands","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Trinidad and Tobago","Nicaragua","Barbados","Dominican Republic","Colombia","Ireland","United Kingdom","Senegal","Guinea-Bissau","Guinea","Ivory Coast","United States","Colombia","Colombia","Colombia","Morocco","Spain","Spain","United Arab Emirates","Cyprus","Eritrea","Egypt","Eritrea","Georgia","Iran","Lebanon","Libya","Malta","Oman","Saudi Arabia","Sri Lanka","Sudan","Togo","Greece","Turkey","Monaco","Jordan","Djibouti","Bangladesh","Nigeria","Cameroon","Palau","South Korea","United States","United Kingdom","New Zealand","United Kingdom","France","United Kingdom","United Kingdom","Samoa","Tonga","United Kingdom","Chile","New Zealand","Uruguay","Vanuatu","Namibia","France","Sierra Leone","Iceland","Peru","Uruguay","New Zealand","Peru","Chile","Chile","Brazil","Kiribati","Argentina","Australia","Australia","Comores","France","France","France","Australia","France","Madagascar"],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2124,2175,8640,0,0,0,0,0,0,0,0,0,0,0,36288,48994,0,0,48934,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8623,0,0,0,0,0,0,0,0,2149,0,0,0,0,0,2166,0,0,0,0,0,0,0,0,0,0,0,0,8606,8613,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2124,2175,8640,0,0,0,0,0,0,0,0,0,0,0,2221,2221,0,0,2131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2149,0,0,0,0,0,0,0,0,2149,0,0,0,0,0,2166,0,0,0,0,0,0,0,0,0,0,0,0,2163,7963,0,0,0],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Guyana","Colombia","Dominican Republic",null,null,null,null,null,null,null,null,null,null,null,"Melilla","Perejil Island",null,null,"Doumeira Islands",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Falkland / Malvinas Islands",null,null,null,null,null,null,null,null,"Argentina",null,null,null,null,null,"Ecuador",null,null,null,null,null,null,null,null,null,null,null,null,"Mayotte","Ile Tromelin",null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"GUY","COL","DOM",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"FLK",null,null,null,null,null,null,null,null,"ARG",null,null,null,null,null,"ECU",null,null,null,null,null,null,null,null,null,null,null,null,"MYT",null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Guyana","Colombia","Dominican Republic",null,null,null,null,null,null,null,null,null,null,null,"Morocco","Morocco",null,null,"Djibouti",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Argentina",null,null,null,null,null,null,null,null,"Argentina",null,null,null,null,null,"Ecuador",null,null,null,null,null,null,null,null,null,null,null,null,"Comores","Madagascar",null,null,null],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2201,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8613,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2201,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8614,0,0,0],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Venezuela",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Ile Tromelin",null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"VEN",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Venezuela",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Republic of Mauritius",null,null,null],[77.54181,163.6885,52.46886,-64.50497,-24.17164,-17.61396,-81.13914,-109.21728,-80.34583,-86.50737,-68.97176,-69.67224,-92.0908,-6.9969,-18.38751,-162.89881,-66.78687,-63.60185,-62.90578,-61.10359,-61.69442,-59.98478,-83.49562,-57.13214,-72.50386,-71.09015,-11.74631,-2.65845,-18.50357,-17.5672,-15.62051,-5.45221,-169.50612,-78.06222,-80.30185,-81.16088,-9.85201,-2.91697,-5.42011,53.89303,32.63526,43.22221,31.1503,40.59255,40.56174,53.8854,34.90392,18.49934,15.11121,58.66998,40.4858,81.63607,38.14367,1.82135,23.93245,33.2206,7.58768,34.94683,43.43296,90.56153,4.82275,9.31089,133.0671,127.57712,-169.06347,-14.36337,-161.30341,-58.32237,-144.00327,-127.42131,-5.70869,-172.75372,-174.76586,-11.20987,-75.62881,-169.33138,-55.16096,168.56883,12.28547,-59.85044,-14.14468,-18.44845,-82.53248,-53.32143,-172.08495,-78.88478,-79.99086,-107.43869,-29.09644,-172.45397,-62.1595,105.36523,96.85434,43.45423,51.21218,45.30656,54.67305,73.73051,68.9746,47.25395],[-38.29431,-10.05068,-6.54776,20.38988,16.0919,28.36715,19.15345,10.30869,8.2888,6.73691,13.16246,19.13826,12.55243,62.5946,13.32867,6.68794,17.79821,17.37739,16.99022,13.8777,13.15805,10.95788,12.81975,10.68079,15.01851,15.05334,52.65269,49.63968,13.69463,10.58066,9.18114,3.30891,16.75109,8.60754,14.38087,14.30362,32.78135,35.31672,35.91465,24.94396,34.48929,12.75889,30.45123,15.82346,42.44625,29.78242,33.90942,33.143,35.31355,18.94915,22.45463,6.54638,19.74792,4.63949,36.50714,40.52224,43.34802,29.43517,11.9971,20.47561,4.08512,3.46278,6.44073,35.74071,-13.85484,-7.94747,-15.01891,-51.66703,-18.73634,-24.60623,-15.97278,-13.29687,-20.22175,-38.7619,-40.98629,-19.52315,-36.25493,-16.59488,-23.64969,16.7988,6.63541,64.69826,-3.38858,-35.78927,-8.63257,-11.8994,-26.33091,-26.824,-20.50277,-3.73181,-47.08999,-11.24358,-12.03146,-11.42314,-46.30696,-13.21698,-15.71127,-53.49863,-48.87795,-20.91335],[8386,8314,8337,8411,8362,8364,8407,8401,8423,8424,26517,8409,8430,8435,8370,8443,33179,26518,8413,8416,8421,8420,8425,48969,48970,48971,5681,21788,8371,8471,8472,8473,8452,8426,62596,62598,8367,49000,48998,8360,8376,48956,8490,8351,5678,8469,8374,8372,5685,8354,8356,8346,8355,8392,5679,5697,21790,8491,8352,8481,8474,8475,8315,8327,8444,8379,8446,8389,8440,8439,8380,8445,8448,8382,8465,8447,48961,8313,8395,33177,8390,5680,48962,8467,8449,8432,22756,21787,8381,8450,8466,8309,8308,8334,8385,48944,48946,8388,8387,8348],[512188,1605325,1341504,81555,801936,445910,118291,435657,331318,581726,25401,350694,110695,265632,23097,353670,154661,9487,9502,15413,36244,76562,213813,67,13111,869,427039,6531,158358,106870,102163,171760,442443,718338,2838,3689,280452,27,1,51674,98450,245,243342,78110,22944,215332,20184,364524,52923,556490,224219,533559,62826,15447,482910,262233,288,97,7223,112166,179048,15143,614807,347671,405830,446005,1969553,550566,4766689,842291,449215,130480,666052,758168,2488052,318140,41414,623424,562212,90705,160584,763239,16097,143092,320548,854698,450960,729763,472481,745782,1072053,327994,467440,164476,575375,66738,274555,417321,550817,1196285],["FRA","SLB","SYC","GBR","CPV","ESP","GBR","FRA","PAN","CRI","NLD","DOM","GTM","DNK","GMB","USA","USA","NLD","KNA","LCA","VCT","TTO","NIC","BRB","DOM","COL","IRL","GBR","SEN","GNB","GIN","CIV","USA","COL","COL","COL","MAR","ESP","ESP","ARE","CYP","ERI","EGY","ERI","GEO","IRN","LBN","LBY","MLT","OMN","SAU","LKA","SDN","TGO","GRC","TUR","MCO","JOR","DJI","BGD","NGA","CMR","PLW","KOR","USA","GBR","NZL","GBR","FRA","GBR","GBR","WSM","TON","GBR","CHL","NZL","URY","VUT","NAM","FRA","SLE","ISL","PER","URY","NZL","PER","CHL","CHL","BRA","KIR","ARG","AUS","AUS","COM","FRA","FRA","FRA","AUS","FRA","MDG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"GUY","COL","DOM",null,null,null,null,null,null,null,null,null,null,null,"MAR","MAR",null,null,"DJI",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"ARG",null,null,null,null,null,null,null,null,"ARG",null,null,null,null,null,"ECU",null,null,null,null,null,null,null,null,null,null,null,null,"COM","MDG",null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"VEN",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"MUS",null,null,null],[250,90,690,826,132,724,826,250,591,188,528,214,320,208,270,840,840,528,659,662,670,780,558,52,214,170,372,826,686,624,324,384,840,170,170,170,504,724,724,784,196,232,818,232,268,364,422,434,470,512,682,144,729,768,300,792,492,400,262,50,566,120,585,410,840,826,554,826,250,826,826,882,776,826,152,554,858,548,516,250,694,352,604,858,554,604,152,152,76,296,32,36,36,174,250,250,250,36,250,450],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,328,170,214,null,null,null,null,null,null,null,null,null,0,null,504,504,null,null,262,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,32,null,null,null,null,null,null,null,null,32,null,null,null,null,null,218,null,null,null,null,null,null,null,null,null,null,0,null,174,450,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,862,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,null,0,480,null,null,null],[260,90,690,92,132,null,136,null,591,188,531,214,320,234,270,581,630,535,659,662,670,780,558,52,214,170,372,831,686,624,324,384,581,170,null,0,504,null,null,784,196,null,818,232,268,364,422,434,470,512,682,144,729,768,300,792,492,400,262,50,566,120,585,410,16,654,184,238,258,612,654,882,776,654,152,570,858,548,516,312,694,352,604,858,772,604,152,null,null,296,32,162,166,174,260,175,null,334,260,450],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,328,170,214,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,238,null,null,null,null,null,null,null,null,32,null,null,null,null,null,218,null,null,null,null,null,null,null,null,null,null,0,null,175,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,862,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,null,0,null,null,null,null],["Amsterdam and Saint Paul Islands","Solomon Islands","Seychelles","British Virgin Islands","Cape Verde","Canary Islands","Cayman Islands","Clipperton Island","Panama","Costa Rica","Curaçao","Dominican Republic","Guatemala","Faeroe","Gambia","Palmyra Atoll","Puerto Rico","Saba","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Trinidad and Tobago","Nicaragua","Barbados","Dominican Republic","Colombia","Ireland","Guernsey","Senegal","Guinea-Bissau","Guinea","Ivory Coast","Johnston Atoll","Colombia","Serrana Bank","Quitasueño Bank","Morocco","Melilla","Perejil Island","United Arab Emirates","Cyprus","Doumeira Islands","Egypt","Eritrea","Georgia","Iran","Lebanon","Libya","Malta","Oman","Saudi Arabia","Sri Lanka","Sudan","Togo","Greece","Turkey","Monaco","Jordan","Djibouti","Bangladesh","Nigeria","Cameroon","Palau","South Korea","American Samoa","Ascension","Cook Islands","Falkland / Malvinas Islands","French Polynesia","Pitcairn","Saint Helena","Samoa","Tonga","Tristan da Cunha","Chile","Niue","Uruguay","Vanuatu","Namibia","Guadeloupe","Sierra Leone","Iceland","Peru","Uruguay","Tokelau","Peru","Islas San Félix and San Ambrosio","Easter Island","Trindade","Phoenix Group","Argentina","Christmas Island","Cocos Islands","Comores","Crozet Islands","Mayotte","Ile Tromelin","Heard and McDonald Islands","Kerguélen","Madagascar"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fid<\/th>\n      <th>mrgid<\/th>\n      <th>geoname<\/th>\n      <th>mrgid_ter1<\/th>\n      <th>pol_type<\/th>\n      <th>mrgid_sov1<\/th>\n      <th>territory1<\/th>\n      <th>iso_ter1<\/th>\n      <th>sovereign1<\/th>\n      <th>mrgid_ter2<\/th>\n      <th>mrgid_sov2<\/th>\n      <th>territory2<\/th>\n      <th>iso_ter2<\/th>\n      <th>sovereign2<\/th>\n      <th>mrgid_ter3<\/th>\n      <th>mrgid_sov3<\/th>\n      <th>territory3<\/th>\n      <th>iso_ter3<\/th>\n      <th>sovereign3<\/th>\n      <th>x_1<\/th>\n      <th>y_1<\/th>\n      <th>mrgid_eez<\/th>\n      <th>area_km2<\/th>\n      <th>iso_sov1<\/th>\n      <th>iso_sov2<\/th>\n      <th>iso_sov3<\/th>\n      <th>un_sov1<\/th>\n      <th>un_sov2<\/th>\n      <th>un_sov3<\/th>\n      <th>un_ter1<\/th>\n      <th>un_ter2<\/th>\n      <th>un_ter3<\/th>\n      <th>country<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,4,6,10,11,15,16,20,21,22,23,27,28,29,30,31,32]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="sql"><code>ALTER TABLE eez RENAME TO spatialdata_eez;
+ALTER TABLE spatialdata_eez ADD COLUMN country TEXT;
+UPDATE spatialdata_eez SET country = territory1;
+
+-- FROM: Brendan Ward &lt;bcward@astutespruce.com&gt; 
+-- DATE: 2020-03-02
+--
+-- create simplified versions of large polygons
+-- arbitrary threshold of 200 km2 and simplifying by 100m; yields about 800 polys
+-- can probably simplify up to 1000m with little noticeable impact at global scale down to z4?  z6?  However, too big a simplification level drops polys.
+-- can&#39;t see much of 100-200 km2 areas at Z4 or below
+
+-- Split countries from EEZ dataset (very big &amp; slow dataset)
+DROP TABLE IF EXISTS eez_poly CASCADE;
+
+CREATE TABLE eez_poly AS (
+  WITH tmp AS (
+  SELECT
+    country,
+    (st_dump (geom)).geom::geometry AS geom
+  FROM
+    spatialdata_eez
+  WHERE
+    geom IS NOT NULL
+)
+  SELECT
+    country, st_makevalid (geom) geom, round((st_area (geom::geography) / 1000000)::numeric, 2
+) AS area_km2, round((st_area (st_envelope (geom)::geography) / 1000000)::numeric, 2
+) AS bbox_area_km2
+  FROM
+    tmp
+);
+-- ERROR: 
+--   FATAL:  failed to load summary &quot;/usr/lib/postgresql/12/lib/bitcode/postgis-3.index.bc&quot;: Invalid summary version 8, 1, 2, 3 or 4 expected
+--   SSL connection has been closed unexpectedly
+--   The connection to the server was lost. Attempting reset: Succeeded.
+--   psql (11.7 (Debian 11.7-0+deb10u1), server 12.3 (Debian 12.3-1.pgdg100+1))
+--   WARNING: psql major version 11, server major version 12.
+--            Some psql features might not work.
+--   SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+
+
+CREATE INDEX eez_poly_geom_idx ON eez_poly USING GIST (geom);
+
+CREATE INDEX eez_poly_country_idx ON eez_poly (country);
+
+-- subdivide tables for faster joins
+-- 800s
+
+CREATE TABLE eez_poly_subdivided AS
+SELECT
+  country,
+  st_subdivide (geom) AS geom
+FROM
+  eez_poly
+ORDER BY
+  country;
+
+CREATE INDEX eez_poly_subdivided_geom_idx ON eez_poly_subdivided USING GIST (geom);</code></pre>
+<pre class="r"><code>sql &lt;- &quot;
+CREATE TABLE mpa_poly_subdivided AS
+SELECT
+  id,
+  st_subdivide (geom) AS geom,
+  area_km2,
+  bbox_area_km2
+FROM
+  mpa_poly
+ORDER BY
+  id;
+
+CREATE INDEX mpa_poly_subdivided_geom_idx ON mpa_poly_subdivided USING GIST (geom);
+
+CREATE TABLE mpa_eez_poly_sjoin AS
+SELECT
+  id,
+  country,
+  mpa_poly_subdivided.area_km2 mpa_area_km2,
+  round((st_area (st_intersection (mpa_poly_subdivided.geom, eez_poly_subdivided.geom)::geography) / 1000000)::numeric, 3) AS overlap_km2
+FROM
+  mpa_poly_subdivided,
+  eez_poly_subdivided
+WHERE
+  st_intersects (mpa_poly_subdivided.geom, eez_poly_subdivided.geom);&quot;</code></pre>
+</div>
+</div>
+<div id="analyze" class="section level2">
+<h2>Analyze</h2>
+<div id="eez-1" class="section level3">
+<h3>EEZ</h3>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
